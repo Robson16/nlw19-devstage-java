@@ -6,24 +6,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.rocketseat.nlw19_devstage_java.model.Event;
-import br.com.rocketseat.nlw19_devstage_java.repo.EventRepo;
+import br.com.rocketseat.nlw19_devstage_java.repo.EventRepository;
 
 @Service
 public class EventService {
 	@Autowired
-	private EventRepo eventRepo;
+	private EventRepository eventRepository;
 
 	public Event addNewEvent(Event event) {
 		event.setPrettyName(event.getTitle().toLowerCase().replaceAll(" ", "-"));
 
-		return eventRepo.save(event);
+		return eventRepository.save(event);
 	}
 
 	public List<Event> getAllEvents() {
-		return (List<Event>) eventRepo.findAll();
+		return (List<Event>) eventRepository.findAll();
 	}
 
 	public Event getByPrettyName(String prettyName) {
-		return eventRepo.findByPrettyName(prettyName);
+		return eventRepository.findByPrettyName(prettyName);
 	}
 }

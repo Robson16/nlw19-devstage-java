@@ -15,27 +15,27 @@ import br.com.rocketseat.nlw19_devstage_java.service.EventService;
 
 @RestController
 public class EventController {
-	@Autowired
-	private EventService service;
+    @Autowired
+    private EventService service;
 
-	@PostMapping("/events")
-	public Event addNewEvent(@RequestBody Event newEvent) {
-		return service.addNewEvent(newEvent);
-	}
+    @PostMapping("/events")
+    public Event addNewEvent(@RequestBody Event newEvent) {
+        return service.addNewEvent(newEvent);
+    }
 
-	@GetMapping("/events")
-	public List<Event> getAllEvents() {
-		return service.getAllEvents();
-	}
+    @GetMapping("/events")
+    public List<Event> getAllEvents() {
+        return service.getAllEvents();
+    }
 
-	@GetMapping("/events/{prettyName}")
-	public ResponseEntity<Event> getEventByPrettyName(@PathVariable String prettyName) {
-		Event evt = service.getByPrettyName(prettyName);
+    @GetMapping("/events/{prettyName}")
+    public ResponseEntity<Event> getEventByPrettyName(@PathVariable String prettyName) {
+        Event evt = service.getByPrettyName(prettyName);
 
-		if (evt != null) {
-			return ResponseEntity.ok().body(evt);
-		}
+        if (evt != null) {
+            return ResponseEntity.ok().body(evt);
+        }
 
-		return ResponseEntity.notFound().build();
-	}
+        return ResponseEntity.notFound().build();
+    }
 }

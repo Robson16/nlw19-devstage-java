@@ -32,11 +32,14 @@ O projeto é dividido em camadas para facilitar a manutenção e a escalabilidad
 
 ---
 
-## 🔄 Rotas da API
+## 🔄 Rotas da API 
 
-### 1. Criar um novo evento
-**Endpoint:** `POST /events`  
-**Exemplo de corpo da requisição:**  
+### Gerenciamento de Eventos
+
+**POST /events**  
+Cria um novo evento.
+
+**Exemplo de corpo da requisição:**
 ```json
 {
     "title": "CodeCraft Summit 2025",
@@ -48,29 +51,48 @@ O projeto é dividido em camadas para facilitar a manutenção e a escalabilidad
     "endTime": "21:00:00"
 }
 ```
-**Resposta de sucesso:**  
-- Código: `200 OK`
-- Corpo: Objeto `Event` criado.
 
-### 2. Listar todos os eventos
-**Endpoint:** `GET /events`  
-**Resposta de sucesso:**  
-- Código: `200 OK`
-- Corpo: Lista de todos os eventos cadastrados.
+**GET /events**  
+Retorna todos os eventos cadastrados.
 
-### 3. Buscar evento por `prettyName`
-**Endpoint:** `GET /events/{prettyName}`  
-**Parâmetro de rota:**  
-- `prettyName`: Identificador amigável do evento.  
-**Resposta de sucesso:**  
-- Código: `200 OK`
-- Corpo: Detalhes do evento correspondente.  
-**Resposta de erro:**  
-- Código: `404 Not Found`
+**GET /events/{prettyName}**  
+Retorna os detalhes de um evento específico pelo seu `prettyName`.
 
 ---
 
-## ⚙️ Como Executar o Projeto
+### Gerenciamento de Inscrições
+
+**POST /subscription/{prettyName}**  
+Cria uma nova inscrição para o evento com o `prettyName` especificado.
+
+**POST /subscription/{prettyName}/{indicationUserId}**  
+Cria uma nova inscrição para o evento com o `prettyName` especificado, com indicação de outro usuário pelo `indicationUserId`.
+
+**Exemplo de corpo da requisição:**
+```json
+{
+    "name": "John Doe",
+    "email": "john.doe@example.com"
+}
+```
+
+**Respostas possíveis:**
+- **200 OK:** Inscrição realizada com sucesso.
+- **404 Not Found:** Evento ou usuário de indicação não encontrados.
+- **409 Conflict:** Inscrição já existente para o mesmo evento.
+- **400 Bad Request:** Requisição inválida.
+
+---
+
+## ❗Exceções Personalizadas
+
+- `EventNotFoundException`: Lançada quando o evento não é encontrado.
+- `IndicationUserNotFoundException`: Lançada quando o usuário indicado não é encontrado.
+- `SubscriptionConflictException`: Lançada quando já existe uma inscrição para o evento.
+
+---
+
+## 💻 Como Executar o Projeto
 
 ### Pré-requisitos
 - Java 21 ou superior.
@@ -80,7 +102,7 @@ O projeto é dividido em camadas para facilitar a manutenção e a escalabilidad
 ### Passos
 1. Clone este repositório:
    ```bash
-   git clone https://github.com/seu-usuario/nlw19-devstage-java.git
+   git clone https://github.com/robson16/nlw19-devstage-java.git
    cd nlw19-devstage-java
    ```
 
@@ -97,22 +119,28 @@ O projeto é dividido em camadas para facilitar a manutenção e a escalabilidad
 
 ## 🔧 Estrutura do Banco de Dados
 
-A tabela `events` possui os seguintes campos:
-- `id`: Identificador único do evento.
+### Tabela: `tbl_event`
+- `event_id` (PK): Identificador do evento.
 - `title`: Título do evento.
-- `location`: Local onde ocorrerá o evento.
+- `location`: Localização do evento.
 - `price`: Preço do evento.
-- `startDate` e `endDate`: Datas de início e término.
-- `startTime` e `endTime`: Horários de início e término.
-- `prettyName`: Identificador amigável para facilitar a busca.
+- `start_date`: Data de início do evento.
+- `end_date`: Data de término do evento.
+- `start_time`: Horário de início do evento.
+- `end_time`: Horário de término do evento.
 
----
+### Tabela: `tbl_user`
+- `user_id` (PK): Identificador do usuário.
+- `name`: Nome do usuário.
+- `email`: E-mail do usuário.
 
-## 📞 Suporte
-Caso tenha dúvidas ou problemas, sinta-se à vontade para abrir uma issue ou entrar em contato!
+### Tabela: `tbl_subscription`
+- `subscription_number` (PK): Número da inscrição.
+- `event_id` (FK): Referência ao evento inscrito.
+- `subscribed_user_id` (FK): Referência ao usuário inscrito.
+- `indication_user_id` (FK, nullable): Referência ao usuário que indicou, se aplicável.
 
 ---
 
 ### 🌟 Créditos
 Projeto desenvolvido durante o evento NLW 19 Connect da Rocketseat.
-
