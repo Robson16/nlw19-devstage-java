@@ -62,25 +62,59 @@ Retorna os detalhes de um evento específico pelo seu `prettyName`.
 
 ### Gerenciamento de Inscrições
 
-**POST /subscription/{prettyName}**  
-Cria uma nova inscrição para o evento com o `prettyName` especificado.
+**POST** `/subscription/{prettyName}`  
+**POST** `/subscription/{prettyName}/{indicationUserId}`
 
-**POST /subscription/{prettyName}/{indicationUserId}**  
-Cria uma nova inscrição para o evento com o `prettyName` especificado, com indicação de outro usuário pelo `indicationUserId`.
+Cria uma nova inscrição para um evento.
 
-**Exemplo de corpo da requisição:**
+#### Parâmetros:
+- `prettyName` (String) – Nome formatado do evento.
+- `indicationUserId` (Integer, opcional) – ID do usuário que indicou a inscrição.
+- `subscriber` (JSON) – Dados do usuário que deseja se inscrever.
+
+#### Corpo da Requisição (Exemplo):
 ```json
 {
-    "name": "John Doe",
-    "email": "john.doe@example.com"
+  "name": "João Silva",
+  "email": "joao.silva@email.com"
 }
 ```
 
-**Respostas possíveis:**
-- **200 OK:** Inscrição realizada com sucesso.
-- **404 Not Found:** Evento ou usuário de indicação não encontrados.
-- **409 Conflict:** Inscrição já existente para o mesmo evento.
-- **400 Bad Request:** Requisição inválida.
+#### Respostas:
+- **200 OK** – Inscrição criada com sucesso.
+- **404 Not Found** – Evento ou usuário indicador não encontrado.
+- **409 Conflict** – Usuário já inscrito no evento.
+
+---
+
+### Obter ranking de inscrições por evento
+
+**GET** `/subscription/{prettyName}/ranking`
+
+Retorna o ranking completo de inscrições para um evento específico.
+
+#### Parâmetros:
+- `prettyName` (String) – Nome formatado do evento.
+
+#### Respostas:
+- **200 OK** – Lista do ranking retornada com sucesso.
+- **404 Not Found** – Evento não encontrado.
+
+---
+
+### Obter posição do usuário no ranking
+
+**GET** `/subscription/{prettyName}/ranking/{userId}`
+
+Retorna a posição do usuário no ranking de um evento específico.
+
+#### Parâmetros:
+- `prettyName` (String) – Nome formatado do evento.
+- `userId` (Integer) – ID do usuário.
+
+#### Respostas:
+- **200 OK** – Posição do usuário no ranking retornada com sucesso.
+- **404 Not Found** – Evento não encontrado ou usuário sem inscrição.
 
 ---
 
